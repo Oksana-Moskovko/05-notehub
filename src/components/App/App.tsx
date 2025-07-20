@@ -8,12 +8,13 @@ import {
 } from "@tanstack/react-query";
 
 import css from "../App/App.module.css";
-// import type { Note } from "../../types/note";
 import NoteList from "../NoteList/NoteList";
 import SearchBox from "../SearchBox/SearchBox";
 import Pagination from "../Pagination/Pagination";
 import Modal from "../Modal/Modal";
 import NoteForm from "../NoteForm/NoteForm";
+import Loader from "../Loader/Loader";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 import { fetchNotes, deleteNote } from "../../services/noteService";
 
@@ -23,7 +24,7 @@ export default function App() {
 
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isError, error, isSuccess } = useQuery({
+  const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ["notes", searchQuery, currentPage],
     queryFn: () =>
       fetchNotes({ search: searchQuery, page: currentPage, perPage: 12 }),
@@ -74,11 +75,9 @@ export default function App() {
             Create note +
           </button>
         </header>
-
         <NoteList notes={notes} onDelete={handleDeleteNote} />
-
-        {isError && <p>Error: {(error as Error).message}</p>}
-        {isLoading && <p>Loading...</p>}
+        {isLoading && <Loader />}
+        {isError && <ErrorMessage />}
         {isModalOpen && (
           <Modal onClose={closeModal}>
             <NoteForm
