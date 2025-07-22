@@ -55,18 +55,19 @@ export default function App() {
             Create note +
           </button>
         </header>
-        <NoteList
-          notes={notes}
-          queryKey={["notes", searchQuery, currentPage]}
+        {notes.length > 0 && (
+         <NoteList 
+           notes={notes}
+           queryKey={["notes", searchQuery,  currentPage]}
         />
+        )}
         {isLoading && <Loader />}
         {isError && <ErrorMessage />}
         {isModalOpen && (
           <Modal onClose={closeModal}>
             <NoteForm
               onClose={closeModal}
-              searchQuery={searchQuery}
-              currentPage={currentPage}
+              queryKey={["notes", searchQuery, currentPage]}
             />
           </Modal>
         )}
