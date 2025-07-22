@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
-import {
-  useQuery,
-  useMutation,
-  keepPreviousData,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
 import css from "../App/App.module.css";
 import NoteList from "../NoteList/NoteList";
@@ -15,14 +10,11 @@ import Modal from "../Modal/Modal";
 import NoteForm from "../NoteForm/NoteForm";
 import Loader from "../Loader/Loader";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
-
-import { fetchNotes, deleteNote } from "../../services/noteService";
+import { fetchNotes } from "../../services/noteService";
 
 export default function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-
-  const queryClient = useQueryClient();
 
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ["notes", searchQuery, currentPage],
@@ -39,18 +31,6 @@ export default function App() {
     },
     300
   );
-
-  const { mutate: handleDeleteNote } = useMutation({
-    mutationFn: (id: number) => deleteNote(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["notes", searchQuery, currentPage],
-      });
-    },
-    onError: (error) => {
-      console.log("Failed to delete note:", error);
-    },
-  });
 
   const notes = data?.notes ?? [];
   const totalPages = data?.totalPages ?? 0;
@@ -75,7 +55,10 @@ export default function App() {
             Create note +
           </button>
         </header>
-        <NoteList notes={notes} onDelete={handleDeleteNote} />
+        <NoteList
+          notes={notes}
+          queryKey={["notes", searchQuery, currentPage]}
+        />
         {isLoading && <Loader />}
         {isError && <ErrorMessage />}
         {isModalOpen && (

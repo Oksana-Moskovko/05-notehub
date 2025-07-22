@@ -2,11 +2,9 @@ export interface Note {
     id: number;
     title: string;
     content: string;
-    createdAt: string;
-    updatedAt: string;
-    tag: string;
+    createdAt?: string;
+    updatedAt?: string;
+    tag: NoteTag;
 }
 
-export interface NoteTag {
-    message: string;
-}
+export type NoteTag = "Todo" | "Work" | "Personal" | "Meeting" | "Shopping";
