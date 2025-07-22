@@ -21,7 +21,7 @@ const initialValues: NoteFormValues = {
 
 interface NoteFormProps {
   onClose: () => void;
-  queryKey: unknown[];
+  queryKey: (string | number)[];
 }
 
 const NoteFormSchema = Yup.object().shape({
