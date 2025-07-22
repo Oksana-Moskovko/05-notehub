@@ -21,8 +21,7 @@ const initialValues: NoteFormValues = {
 
 interface NoteFormProps {
   onClose: () => void;
-  searchQuery: string;
-  currentPage: number;
+  queryKey: unknown[];
 }
 
 const NoteFormSchema = Yup.object().shape({
@@ -36,20 +35,14 @@ const NoteFormSchema = Yup.object().shape({
     .required("Tag is required"),
 });
 
-export default function NoteForm({
-  onClose,
-  searchQuery,
-  currentPage,
-}: NoteFormProps) {
+export default function NoteForm({ onClose, queryKey }: NoteFormProps) {
   const fieldId = useId();
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
     mutationFn: createNote,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["notes", searchQuery, currentPage],
-      });
+      queryClient.invalidateQueries({ queryKey });
       onClose();
     },
   });
