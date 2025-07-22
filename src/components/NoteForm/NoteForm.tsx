@@ -87,7 +87,7 @@ export default function NoteForm({
             as="textarea"
             id={`${fieldId}-content`}
             name="content"
-            rows="8"
+            rows={8}
             className={css.textarea}
           />
           <ErrorMessage component="span" name="content" className={css.error} />
@@ -114,7 +114,8 @@ export default function NoteForm({
           <button type="button" className={css.cancelButton} onClick={onClose}>
             Cancel
           </button>
-          <button type="submit" className={css.submitButton} disabled={false}>
+          <button type="submit" className={css.submitButton}
+>
             Create note
           </button>
         </div>
