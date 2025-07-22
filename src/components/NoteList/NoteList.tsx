@@ -10,6 +10,8 @@ interface NoteListProps {
 }
 
 export default function NoteList({ notes, queryKey }: NoteListProps) {
+  if (!notes.length) return null;
+
   const queryClient = useQueryClient();
 
   const { mutate: handleDeleteNote } = useMutation({
@@ -22,8 +24,6 @@ export default function NoteList({ notes, queryKey }: NoteListProps) {
       console.error("Failed to delete note:", error);
     },
   });
-
-  if (!notes.length) return null;
 
   return (
     <ul className={css.list}>
